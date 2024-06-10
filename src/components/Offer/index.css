@@ -1,0 +1,30 @@
+.offer-parent{
+    height:auto;
+    padding:75px 0px 75px 0px;
+    width:100vw;
+    background-color: black;
+    display:flex;
+    flex-direction: column;
+    align-items: center;
+    gap:48px;
+}
+
+.offer-list{
+    height:300px;
+
+    overflow-y: scroll;
+    padding:12px;
+    scroll-behavior: smooth;
+
+}
+
+.offer-list::-webkit-scrollbar {
+    display: none;
+
+}
+.offer-child{
+    margin-top:150px
+}
+.offer-child:last-child{
+    margin-bottom: 150px;
+}
