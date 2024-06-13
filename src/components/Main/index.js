@@ -141,7 +141,7 @@ export const Main = () => {
        
         
   //       try {
-  //         const response = await fetch(`http://192.168.0.155:8000/upload_${api}`, {
+  //         const response = await fetch(`lobster-app-eg6c6.ondigitalocean.app/upload_${api}`, {
   //           method: "POST",
   //           body: formData,
   //         });
@@ -218,7 +218,7 @@ export const Main = () => {
         }
   
         try {
-          const response = await fetch(`http://192.168.0.155:8000/upload_${api}`, {
+          const response = await fetch(`lobster-app-eg6c6.ondigitalocean.app/upload_${api}`, {
             method: 'POST',
             body: formData,
           });
@@ -319,7 +319,7 @@ export const Main = () => {
       }
   
       try {
-        const response = await fetch(`http://192.168.0.155:8000/upload_${api}`, {
+        const response = await fetch(`lobster-app-eg6c6.ondigitalocean.app/upload_${api}`, {
           method: "POST",
           body: formData,
         });
