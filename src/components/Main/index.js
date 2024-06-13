@@ -44,7 +44,7 @@ export const Main = () => {
   useEffect(()=>{
     console.log(commonTo,commonFileType)
     if( commonFileType!=null && commonTo!=null){
-      setdiss(true)
+      setdiss(true);
     }
     else{
       setdiss(false)
@@ -94,85 +94,161 @@ export const Main = () => {
     console.log(selectedfiles);
   };
 
-  const submitfile = async (event) => {
-    event.preventDefault();
-    setSelectedfiles((prevSelectedFiles) => {
-      return prevSelectedFiles.map((file) => ({
-        ...file,
-        download: false,
-      }));
-    });
+  // const submitfile = async (event) => {
+  //   event.preventDefault();
+  //   setSelectedfiles((prevSelectedFiles) => {
+  //     return prevSelectedFiles.map((file) => ({
+  //       ...file,
+  //       download: false,
+  //     }));
+  //   });
     
-    // Use a for loop to process each file one by one
-    for (let index = 0; index < selectedfiles.length; index++) {
-      setSelectedfiles((prevSelectedFiles) => {
-        return prevSelectedFiles.map((file,key) => ({
-          ...file,
-          download:index==key? 'ongoing' : false,
-        }));
-      });
-      const fileData = selectedfiles[index];
-      console.log(commonTo)
-      if (fileData.convertTo !== "" || commonTo != null) {
-        const { file, convertTo: originalConvertTo, fileType } = fileData;
-        let convertTo = originalConvertTo;
-        if (commonTo != null) {
+  //   // Use a for loop to process each file one by one
+  //   for (let index = 0; index < selectedfiles.length; index++) {
+  //     setSelectedfiles((prevSelectedFiles) => {
+  //       return prevSelectedFiles.map((file,key) => ({
+  //         ...file,
+  //         download:index==key? 'ongoing' : false,
+  //       }));
+  //     });
+  //     const fileData = selectedfiles[index];
+  //     console.log(commonTo)
+  //     if (fileData.convertTo !== "" || commonTo != null) {
+  //       const { file, convertTo: originalConvertTo, fileType } = fileData;
+  //       let convertTo = originalConvertTo;
+  //       if (commonTo != null) {
            
-            convertTo = commonTo;
-        }
-        console.log(commonTo,"hello")
-        // Create a new FormData object
-        const formData = new FormData();
+  //           convertTo = commonTo;
+  //       }
+  //       console.log(commonTo,"hello")
+  //       // Create a new FormData object
+  //       const formData = new FormData();
         
-        formData.append("convert_to", convertTo);
-        formData.append("fileType", fileType);
-        console.log(fileType);
-        let api = "image";
-        // Append the selected file to the FormData object
+  //       formData.append("convert_to", convertTo);
+  //       formData.append("fileType", fileType);
+  //       console.log(fileType);
+  //       let api = "image";
+  //       // Append the selected file to the FormData object
         
-        if (fileType.toUpperCase() in imageFormats2)  {
-          formData.append("image", file);
-          console.log('img haiye')
-        } else if (fileType.toUpperCase() in videoFormats2 || fileType.toUpperCase() in audioFormats2 ) {
-          formData.append("videoFile", file);
-          console.log("video haiye")
-          api = "video";
-        }
+  //       if (fileType.toUpperCase() in imageFormats2)  {
+  //         formData.append("image", file);
+  //         console.log('img haiye')
+  //       } else if (fileType.toUpperCase() in videoFormats2 || fileType.toUpperCase() in audioFormats2 ) {
+  //         formData.append("videoFile", file);
+  //         console.log("video haiye")
+  //         api = "video";
+  //       }
        
         
+  //       try {
+  //         const response = await fetch(`http://192.168.0.155:8000/upload_${api}`, {
+  //           method: "POST",
+  //           body: formData,
+  //         });
+  
+  //         if (!response.ok) {
+  //           throw new Error("Network response was not ok");
+  //         }
+  
+  //         const data = await response.json(); // Assuming the API returns JSON data
+  //         console.log("API response:", data);
+  //         setCommonFileType(null)
+  //         // Update the specific file's download property
+  //         setSelectedfiles((prevSelectedFiles) => {
+  //           const newSelectedFiles = [...prevSelectedFiles];
+  //           newSelectedFiles[index] = {
+  //             ...newSelectedFiles[index],
+  //             download: true,
+  //           };
+  //           return newSelectedFiles;
+  //         });
+  //       } catch (error) {
+  //         console.error("There was a problem with the fetch operation:", error);
+  //         // Handle any errors that occur during the fetch operation
+  //       }
+  //     } else {
+  //       console.log(fileData);
+  //     }
+  //   }
+  
+  //   // Optional: Reset the form or perform any other actions needed after submission
+  // };
+
+
+  const submitfile = async (event) => {
+    event.preventDefault();
+  
+    // Reset download states for all files
+    setSelectedfiles((prevSelectedFiles) =>
+      prevSelectedFiles.map((file) => ({
+        ...file,
+        download: false,
+      }))
+    );
+  
+    // Use Promise.all to handle multiple asynchronous operations concurrently
+    await Promise.all(selectedfiles.map(async (fileData, index) => {
+      // Update download state to 'ongoing' for the current file
+      setSelectedfiles((prevSelectedFiles) =>
+        prevSelectedFiles.map((file, key) => ({
+          ...file,
+          download: index === key ? 'ongoing' : file.download,
+        }))
+      );
+  
+      if (fileData.convertTo !== '' || commonTo !== null) {
+        const { file, convertTo: originalConvertTo, fileType } = fileData;
+        let convertTo = originalConvertTo;
+        if (commonTo !== null) {
+          convertTo = commonTo;
+        }
+  
+        // Create a new FormData object
+        const formData = new FormData();
+        formData.append('convert_to', convertTo);
+        formData.append('fileType', fileType);
+  
+        let api = 'image';
+        // Append the selected file to the FormData object
+        if (fileType.toUpperCase() in imageFormats2) {
+          formData.append('image', file);
+        } else if (fileType.toUpperCase() in videoFormats2 || fileType.toUpperCase() in audioFormats2) {
+          formData.append('videoFile', file);
+          api = 'video';
+        }
+  
         try {
-          const response = await fetch(`https://lobster-app-eg6c6.ondigitalocean.app/upload_${api}`, {
-            method: "POST",
+          const response = await fetch(`http://192.168.0.155:8000/upload_${api}`, {
+            method: 'POST',
             body: formData,
           });
   
           if (!response.ok) {
-            throw new Error("Network response was not ok");
+            throw new Error('Network response was not ok');
           }
   
           const data = await response.json(); // Assuming the API returns JSON data
-          console.log("API response:", data);
-          setCommonFileType(null)
-          // Update the specific file's download property
-          setSelectedfiles((prevSelectedFiles) => {
-            const newSelectedFiles = [...prevSelectedFiles];
-            newSelectedFiles[index] = {
-              ...newSelectedFiles[index],
-              download: true,
-            };
-            return newSelectedFiles;
-          });
+          console.log('API response:', data);
+  
+          // Update the specific file's download property to true
+          setSelectedfiles((prevSelectedFiles) =>
+            prevSelectedFiles.map((file, key) => ({
+              ...file,
+              download: index === key ? true : file.download,
+            }))
+          );
         } catch (error) {
-          console.error("There was a problem with the fetch operation:", error);
-          // Handle any errors that occur during the fetch operation
+          console.error('There was a problem with the fetch operation:', error);
+          // Optionally handle errors if needed
         }
       } else {
-        console.log(fileData);
+        console.log('No conversion needed for file:', fileData);
       }
-    }
+    }));
   
-    // Optional: Reset the form or perform any other actions needed after submission
+    // Optional: Reset the form or perform any other actions needed after all submissions
   };
+  
   const categorizeFileType = (fileType) => {
     if (fileType.toUpperCase() in imageFormats2) {
       return 'image';
@@ -243,7 +319,7 @@ export const Main = () => {
       }
   
       try {
-        const response = await fetch(`https://lobster-app-eg6c6.ondigitalocean.app/upload_${api}`, {
+        const response = await fetch(`http://192.168.0.155:8000/upload_${api}`, {
           method: "POST",
           body: formData,
         });
@@ -282,6 +358,7 @@ export const Main = () => {
     setSelectedfiles(updatedFiles);
     setSelectedFile(true);
     console.log(selectedfiles);
+  
   };
   const handleRemoveFile = (index) => {
     const updatedFiles = [...selectedfiles];
@@ -290,6 +367,17 @@ export const Main = () => {
     setSelectedFile(selectedfiles[selectedfiles.length - 1]);
     // Update the selectedfiles state
   };
+  const clear=()=>{
+    setSelectedfiles((prevSelectedFiles) => {
+      return prevSelectedFiles.map((file) => ({
+        ...file,
+        convertTo:"",
+      }));
+    });
+  }
+  const common=()=>{
+    setCommonto(null)
+  }
 
   useEffect(() => {
     if (displaywarn != null) {
@@ -467,8 +555,9 @@ export const Main = () => {
                           className="format-array cursor-pointer bg-gray-300"
                           name="convert_to"
                           value={commonTo} // Set the value of the select to the convertTo property of the file
-                          onChange={(e) =>
-                            setCommonto(e.target.value)
+                          onChange={(e) =>{
+                            setCommonto(e.target.value);
+                            clear();}
                           }
                           required
                         >
@@ -605,9 +694,11 @@ export const Main = () => {
                           className="format-array cursor-pointer bg-gray-300"
                           name="convert_to"
                           value={file.convertTo} // Set the value of the select to the convertTo property of the file
-                          onChange={(e) =>
-                            handleFormatChange(index, e.target.value)
-                          }
+                          onChange={(e) =>{
+                            common();
+                            handleFormatChange(index, e.target.value);
+                            
+                          }}
                           required
                         >
                           <option value="" disabled selected>
@@ -639,7 +730,7 @@ export const Main = () => {
                           </>
                         )}
                          <SiConvertio 
-  className={`${file.convertTo ? 'text-green-500 cursor-pointer' : 'text-gray-500 cursor-not-allowed'} text-2xl  ${file.download === 'ongoing' ? 'single-converter' : ''}`} 
+  className={`${file.convertTo ? 'text-green-500 cursor-pointer' : 'text-gray-500 cursor-not-allowed'} text-2xl transition duration-400 ease-in-out  ${file.download === 'ongoing' ? 'single-converter' : ''}`} 
   onClick={() => { uploadFileByIndex(index); }} 
 />
 

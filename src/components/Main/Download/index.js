@@ -18,14 +18,14 @@ export const DownloadButton = ({ fileUrl,type }) => {
       // URL of the file to download
       var url;
       if (type.toUpperCase() in imageFormats2){
-        url="https://lobster-app-eg6c6.ondigitalocean.app/download/uploads/"+fileUrl
+        url="http://192.168.0.155:8000/download/uploads/"+fileUrl
       }
       else if(type.toUpperCase() in videoFormats2){
-        url="https://lobster-app-eg6c6.ondigitalocean.app/download/uploads/"+fileUrl
+        url="http://192.168.0.155:8000/download/uploads/"+fileUrl
         
       }
       else if(type.toUpperCase() in audioFormats2){
-        url="https://lobster-app-eg6c6.ondigitalocean.app/download/uploads/"+fileUrl
+        url="http://192.168.0.155:8000/download/uploads/"+fileUrl
         
       }
       console.log(url)

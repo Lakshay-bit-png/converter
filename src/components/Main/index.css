@@ -355,6 +355,7 @@
     animation:rotate 2s linear infinite;
     opacity: 0.7;
     cursor: not-allowed;
+    color: #6EE7B7
 
   }
   @keyframes rotate {
