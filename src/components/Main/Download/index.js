@@ -18,14 +18,14 @@ export const DownloadButton = ({ fileUrl,type }) => {
       // URL of the file to download
       var url;
       if (type.toUpperCase() in imageFormats2){
-        url="${process.env.REACT_APP_SERVER}/download/uploads/"+fileUrl
+        url=`${process.env.REACT_APP_SERVER}/download/uploads/`+fileUrl
       }
       else if(type.toUpperCase() in videoFormats2){
-        url="${process.env.REACT_APP_SERVER}/download/uploads/"+fileUrl
+        url=`${process.env.REACT_APP_SERVER}/download/uploads/`+fileUrl
         
       }
       else if(type.toUpperCase() in audioFormats2){
-        url="${process.env.REACT_APP_SERVER}/download/uploads/"+fileUrl
+        url=`${process.env.REACT_APP_SERVER}/download/uploads/`+fileUrl
         
       }
       console.log(url)

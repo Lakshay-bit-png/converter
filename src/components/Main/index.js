@@ -18,6 +18,10 @@ import { Heroleftmain } from "./Heroleftmain";
 import { DownloadButton } from "./Download";
 import { audioFormats2,videoFormats2,imageFormats2,allformats2,allformats } from "./Formats/formats";
 
+
+// Generate a unique channel name
+
+
 export const Main = () => {
   const [selectedFile, setSelectedFile] = useState(null);
   const [selectedFormat, setSelectedFormat] = useState(false);
@@ -40,7 +44,7 @@ export const Main = () => {
     left: 0,
   };
 
-
+  
   useEffect(()=>{
     console.log(commonTo,commonFileType)
     if( commonFileType!=null && commonTo!=null){
@@ -747,6 +751,7 @@ export const Main = () => {
             </div>
           </div>
         </div>
+        
       </div>
   
     </>
