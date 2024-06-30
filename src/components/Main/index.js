@@ -224,6 +224,9 @@ export const Main = () => {
         try {
           const response = await fetch(`${process.env.REACT_APP_SERVER}/upload_${api}`, {
             method: 'POST',
+            headers: {
+              'Content-Type': 'multipart/form-data',
+            },
             body: formData,
           });
   
